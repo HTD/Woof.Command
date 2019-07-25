@@ -1,0 +1,954 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Woof.Command</name>
+    </assembly>
+    <members>
+        <member name="T:Woof.Command.CommandAutoCompleteList">
+            <summary>
+            AutoComplete list module for <see cref="T:Woof.Command.CommandShell"/>.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandAutoCompleteList.Count">
+            <summary>
+            Gets the number of matching completions.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandAutoCompleteList.CurrentIndex">
+            <summary>
+            Gets or sets current completion index.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandAutoCompleteList.MatchingPath">
+            <summary>
+            Gets the matching file system path or null if matching within current path.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandAutoCompleteList.PeekColor">
+            <summary>
+            Gets or sets default color used to show auto complete peek items.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandAutoCompleteList.PeekMax">
+            <summary>
+            Gets or sets the maximum number of items shown as auto complete peek.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandAutoCompleteList.Item(System.Int32)">
+            <summary>
+            Gets the mathing completion by specified index.
+            </summary>
+            <param name="index">The index of the element on the list.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates new <see cref="T:Woof.Command.CommandAutoCompleteList"/> initialized from a collection of commands.
+            </summary>
+            <param name="commands">A collection of commands to initialize the list.</param>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.AddCommands(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Extends the commands list.
+            </summary>
+            <param name="commands">Any string collection.</param>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.Match(System.String,System.Boolean)">
+            <summary>
+            Filters the list by the matching start string.
+            </summary>
+            <param name="start">Common start for the completions.</param>
+            <param name="includeCommands">Set true to include internal commands.</param>
+            <returns>Offset where the completion match or -1 when nothing matches.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.Next">
+            <summary>
+            Gets the next matching auto complete item.
+            </summary>
+            <returns>Matching item or null.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.Reload(System.String,System.Boolean)">
+            <summary>
+            Reloads file system entries for the directory, adds commands to the list.
+            </summary>
+            <param name="dir">Directory to feed the items list.</param>
+            <param name="includeCommands">Set true to include internal commands.</param>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.Reset">
+            <summary>
+            Resets the auto complete index and clears peek preview if shown.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.Peek">
+            <summary>
+            Shows the peek preview of available completions.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.Clear">
+            <summary>
+            Clears the peek preview.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.GetEnumerator">
+            <summary>
+            Enumerats string items.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Woof.Command.CommandAutoCompleteList.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Enumerates items.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Woof.Command.CommandEventArgs">
+            <summary>
+            Event arguments for <see cref="N:Woof.Command"/> event.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandEventArgs.CommandLine">
+            <summary>
+            Gets the associated command line instance.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandEventArgs.IsHandled">
+            <summary>
+            Set if the command was handled.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandEventArgs.ShouldExit">
+            <summary>
+            Gets or sets a value indicating if the current shell session should end.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandEventArgs.#ctor(System.String)">
+            <summary>
+            Creates new event arguments for the <see cref="N:Woof.Command"/> event.
+            </summary>
+            <param name="commandLine">Command line.</param>
+        </member>
+        <member name="T:Woof.Command.CommandHistory">
+            <summary>
+            Command history lines collection.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandHistory.Count">
+            <summary>
+            Gets the number of stored history lines.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandHistory.CurrentIndex">
+            <summary>
+            Gets or sets current history line index.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandHistory.Serialized">
+            <summary>
+            Gets or sets compacted and compressed serialized history.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandHistory.Item(System.Int32)">
+            <summary>
+            Returns n-th history element counting from the last (for zero).
+            If there is no history line for the level null is returned.
+            </summary>
+            <param name="level">History level. Zero is last, 1 is one before that.</param>
+            <returns>History line.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.#ctor">
+            <summary>
+            Creates empty <see cref="T:Woof.Command.CommandHistory"/>.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a command history lines collection from a string collection.
+            </summary>
+            <param name="items">A string collection to create the history list from.</param>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.#ctor(System.Byte[])">
+            <summary>
+            Creates a command history lines collection from its binary serialized representation.
+            </summary>
+            <param name="serialized">Serialized history data.</param>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.Add(System.String)">
+            <summary>
+            Adds the line to the history if there is a line and if it's not the same as the last added one.
+            </summary>
+            <param name="line">Command line to add.</param>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.Clear">
+            <summary>
+            Clears all history lines.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.Peek(System.Int32)">
+            <summary>
+            Returns n-th history element counting from the last (for zero).
+            If there is no history line for the level null is returned.
+            </summary>
+            <param name="level">History level. Zero is last, 1 is one before that.</param>
+            <returns>History line.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.Prev(System.String)">
+            <summary>
+            Returns subsequent history item, each call returns older one.
+            If current text is available it's added to the history, so the user can get back to that.
+            </summary>
+            <param name="current"></param>
+            <returns>History item.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.Reset">
+            <summary>
+            Resets history index.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.Next">
+            <summary>
+            Returns more recetnt history item, each call returns newer one.
+            If the <see cref="P:Woof.Command.CommandHistory.CurrentIndex"/> is negative the call is ignored.
+            </summary>
+            <returns>History item.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.ToString">
+            <summary>
+            Returns the history as subsequent lines.
+            </summary>
+            <returns>Subsequent lines of text or null.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.ToString(System.Int32)">
+            <summary>
+            Returns the history text except last n lines.
+            </summary>
+            <param name="skipLast">Subsequent lines of text or null.</param>
+            <returns>Subsequent lines of text or null.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.op_Implicit(Woof.Command.CommandHistory)~System.String">
+            <summary>
+            Converts command history into plain lines of text.
+            </summary>
+            <param name="h"><see cref="T:Woof.Command.CommandHistory"/> instance.</param>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.op_Implicit(System.String)~Woof.Command.CommandHistory">
+            <summary>
+            Converts plain lines of text into command history instance.
+            </summary>
+            <param name="s">Plain text lines.</param>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.op_Implicit(Woof.Command.CommandHistory)~System.Byte[]">
+            <summary>
+            Converts command history into compressed serialized binary object.
+            </summary>
+            <param name="h"></param>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.op_Implicit(System.Byte[])~Woof.Command.CommandHistory">
+            <summary>
+            Converts compressed serialized history into <see cref="T:Woof.Command.CommandHistory"/> instance.
+            </summary>
+            <param name="b"></param>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandHistory.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="F:Woof.Command.CommandHistory.Items">
+            <summary>
+            The internal list of items.
+            </summary>
+        </member>
+        <member name="T:Woof.Command.CommandLine">
+            <summary>
+            Optionally interactive command line processor / console renderer.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.Arguments">
+            <summary>
+            Gets the command arguments processed.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.ArgumentsColor">
+            <summary>
+            Gets or sets the display console color of the command line arguments.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.Command">
+            <summary>
+            Gets the exact command alone, without arguments.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.CommandColor">
+            <summary>
+            Gets or sets the display console color of the command line command element.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.CurrentPartIndex">
+            <summary>
+            Gets the index of the part pointed with the current cursor position.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.CurrentPartOffset">
+            <summary>
+            Gets the line offset of the part pointed with the current cursor position.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.CurrentPartLength">
+            <summary>
+            Gets the length of the part pointed with the current cursor position.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.CurrentPart">
+            <summary>
+            Gets or sets (replaces) the unquoted part pointed with the current cursor position.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.Cursor">
+            <summary>
+            Gets or sets a position of the cursor that is used to point the parts within the command line.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.Length">
+            <summary>
+            Gets the current command line length.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.IsOvertype">
+            <summary>
+            Gets or sets a value indicating whether the line input should work in overtype mode.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.IsRendered">
+            <summary>
+            Gets or sets a value indicating whether this command line is rendered to the console.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLine.Text">
+            <summary>
+            Gets or sets command line text.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.#ctor">
+            <summary>
+            Creates a new empty command line.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.#ctor(System.String)">
+            <summary>
+            Creates a new command line from string.
+            </summary>
+            <param name="line">Source command line.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Home(System.Boolean)">
+            <summary>
+            Moves the cursor to the beginning of the command line.
+            </summary>
+            <param name="update">True if the console cursor should be updated with the virtual cursor.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Prev(System.Boolean)">
+            <summary>
+            Moves the cursor to previous part or beginning of the current part.
+            </summary>
+            <param name="update">True if the console cursor should be updated with the virtual cursor.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Left(System.Boolean)">
+            <summary>
+            Moves the cursor one character left if applicable.
+            </summary>
+            <param name="update">True if the console cursor should be updated with the virtual cursor.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Right(System.Boolean)">
+            <summary>
+            Moves the cursor one character right if applicable.
+            </summary>
+            <param name="update">True if the console cursor should be updated with the virtual cursor.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Next(System.Boolean)">
+            <summary>
+            Moves the cursor to the next part or the line end.
+            </summary>
+            <param name="update">True if the console cursor should be updated with the virtual cursor.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.End(System.Boolean)">
+            <summary>
+            Moves the cursor to the end of the command line.
+            </summary>
+            <param name="update">True if the console cursor should be updated with the virtual cursor.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.SetCursorHome">
+            <summary>
+            Resets the X coordinate offset for the home cursor position.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Render">
+            <summary>
+            Renders the current command line to the console.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.UpdateText">
+            <summary>
+            Updates the text of the command line.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.UpdateCursor(System.Nullable{System.Boolean})">
+            <summary>
+            Updates the console cursor position and optionally - visibility.
+            </summary>
+            <param name="visible">If not null, the cursor visibility will be changed to this value.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Type(System.Char)">
+            <summary>
+            Types one character into this command line.
+            </summary>
+            <param name="c">Character to type.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Type(System.String)">
+            <summary>
+            Types a sequence of characters into this command line.
+            </summary>
+            <param name="s">A string of characters to type.</param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Backspace">
+            <summary>
+            Deletes one character back from the cursor position. Moves the cursor 1 character left.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Delete">
+            <summary>
+            Deletes one character on the cursor position.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.AcceptKey(System.ConsoleKeyInfo)">
+            <summary>
+            Accepts a single key and performs an operation on this command line if applicable.
+            </summary>
+            <param name="k">Key that was pressed.</param>
+            <returns>True if the key was handled by the command line itself.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Join(System.String[])">
+            <summary>
+            Joins the parts into string separated with spaces.
+            </summary>
+            <param name="parts">Parts.</param>
+            <returns>Line.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Quote(System.String)">
+            <summary>
+            Quotes the part if the part contains one or more spaces and isn't already quoted.
+            </summary>
+            <param name="part">A single command line part.</param>
+            <returns>Quoted part.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Unquote(System.String)">
+            <summary>
+            Unquotes the part if its quoted with double quotes. Also unquotes incomplete quoting.
+            </summary>
+            <param name="part">A single command line part.</param>
+            <returns>Unquoted part.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Split(System.String,System.Boolean)">
+            <summary>
+            Splits the command line with space character, shell style.
+            Quotes (both single and double) prevent space from being a separator.
+            </summary>
+            <param name="line">A line to split.</param>
+            <param name="leaveQuotes">If set true, quoted parts will still contain quotes.</param>
+            <returns>Parts.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLine.ReadPassword">
+            <summary>
+            Reads a password from the console in a secure way.
+            </summary>
+            <returns>Password as an unmanaged <see cref="T:System.Security.SecureString"/>.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Empty">
+            <summary>
+            Sets properties for the empty instance.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.GetPartIndex(System.Int32)">
+            <summary>
+            Gets the part index at specified position within the command line text.
+            </summary>
+            <param name="at">Position within the command line text.</param>
+            <returns>Part index, negative for whitespace that doesn't belong to any part.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLine.Parse">
+            <summary>
+            Splits the command line into command and arguments, creates parts map.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLine.op_Implicit(Woof.Command.CommandLine)~System.String">
+            <summary>
+            Implicit <see cref="T:System.String"/> conversion, just returns the <see cref="P:Woof.Command.CommandLine.Text"/>.
+            </summary>
+            <param name="l"></param>
+        </member>
+        <member name="M:Woof.Command.CommandLine.op_Implicit(System.String)~Woof.Command.CommandLine">
+            <summary>
+            Implicit <see cref="T:Woof.Command.CommandLine"/> conversion, creates new <see cref="T:Woof.Command.CommandLine"/> from <see cref="T:System.String"/>.
+            </summary>
+            <param name="s"></param>
+        </member>
+        <member name="F:Woof.Command.CommandLine._Cursor">
+            <summary>
+            Cursor position cache.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._Text">
+            <summary>
+            Command line text cache.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._Parts_Q">
+            <summary>
+            Command line parts: quoted.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._Parts_U">
+            <summary>
+            Command line parts: unquoted.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._Map">
+            <summary>
+            Parts map.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._IsOvertype">
+            <summary>
+            <see cref="P:Woof.Command.CommandLine.IsOvertype"/> cache.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._LastLength">
+            <summary>
+            The length of the command line in last render operation.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._NonPrintableKeys">
+            <summary>
+            Keys to be ignored by <see cref="M:Woof.Command.CommandLine.Type(System.Char)"/> method.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLine._XOffset">
+            <summary>
+            X coordinate of the original console position of the rendered command line.
+            </summary>
+        </member>
+        <member name="T:Woof.Command.CommandLineArgumentsEx">
+            <summary>
+            Command line arguments processing class.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLineArgumentsEx.IsEmpty">
+            <summary>
+            Gets a value indicating whether the command line is empty.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLineArgumentsEx.Raw">
+            <summary>
+            Gets the original raw arguments.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLineArgumentsEx.Positional">
+            <summary>
+            Gets all parameters (arguments not prefixed with a switch).
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLineArgumentsEx.Switches">
+            <summary>
+            Gets all switches.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandLineArgumentsEx.Options">
+            <summary>
+            Gets all options (arguments prefixed with a switch).
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLineArgumentsEx.#ctor(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Parses command line arguments into positional arguments, switches and options.
+            </summary>
+            <param name="args">Command line arguments.</param>
+            <param name="markedAsOptions">Optional switches to be treated as options separated with '|', ',' or ' ' character.</param>
+        </member>
+        <member name="F:Woof.Command.CommandLineArgumentsEx.RxElement">
+            <summary>
+            Matches element with or without optional switch.
+            </summary>
+        </member>
+        <member name="T:Woof.Command.CommandLinePositionalArgumentCollection">
+            <summary>
+            A collection containing positional command line arguments.
+            Can be queried without range checking.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLinePositionalArgumentCollection.Arguments">
+            <summary>
+            Command line arguments.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLinePositionalArgumentCollection.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates new collection from any collection.
+            </summary>
+            <param name="values">Initial collection.</param>
+        </member>
+        <member name="P:Woof.Command.CommandLinePositionalArgumentCollection.Item(System.Int32)">
+            <summary>
+            Returns the command line argument selected by the index or null if such element doesn't exist.
+            </summary>
+            <param name="index">Zero based index of the positional argument.</param>
+            <returns>Argument value or null.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLinePositionalArgumentCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLinePositionalArgumentCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="T:Woof.Command.CommandLineSwitchCollection">
+            <summary>
+            A collection containing command line switches.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLineSwitchCollection.Switches">
+            <summary>
+            Command line switches.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLineSwitchCollection.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates new collection from any collection.
+            </summary>
+            <param name="values">Initial collection.</param>
+        </member>
+        <member name="P:Woof.Command.CommandLineSwitchCollection.Item(System.String)">
+            <summary>
+            Returns a value indicating whether the collection contain the switch with specified name or alias.
+            </summary>
+            <param name="name">Name of the switch, or name aliases separated with '|' character.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Woof.Command.CommandLineSwitchCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLineSwitchCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="T:Woof.Command.CommandLineOptionCollection">
+            <summary>
+            A collection containing command line arguments accessible by name or alias.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandLineOptionCollection.Options">
+            <summary>
+            Command line options.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandLineOptionCollection.#ctor(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Creates new collection from a dictionary.
+            </summary>
+            <param name="values">Initial dictionary.</param>
+        </member>
+        <member name="P:Woof.Command.CommandLineOptionCollection.Item(System.String)">
+            <summary>
+            Gets the option value with the specified name or alias in the <see cref="T:Woof.Command.CommandLineOptionCollection"/>.
+            </summary>
+            <param name="name">Name of the option, or name aliases separated with '|' character.</param>
+            <returns>Option value, null if it doesn't exist.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLineOptionCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandLineOptionCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="T:Woof.Command.CommandShell">
+            <summary>
+            Commands Hell v0.666 ;)
+            </summary>
+        </member>
+        <member name="E:Woof.Command.CommandShell.Command">
+            <summary>
+            Occurs whenever the Enter key is pressed - current line is passed as event argument.
+            The event handler can optionally end the shell session.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandShell.Header">
+            <summary>
+            Gets or sets the shell header message.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandShell.ManPages">
+            <summary>
+            Gets the internal man pages or allows to update them with additional pages when set.
+            The set operation does not overwrite original pages, it only adds new pages.
+            </summary>
+            <remarks>
+            Careful, the existing pages cannot be updated or removed.
+            </remarks>
+        </member>
+        <member name="P:Woof.Command.CommandShell.PromptFormat">
+            <summary>
+            Gets or sets the shell command prompt format string.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandShell.Settings">
+            <summary>
+            Gets or sets optional settings key containing settings for this shell.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.CommandShell.SettingsFile">
+            <summary>
+            Gets or sets optional settings file to store this shell settings.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandShell.Settings_History">
+            <summary>
+            History setting name.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandShell.InternalManPages">
+            <summary>
+            Man pages for the <see cref="T:Woof.Command.CommandShell"/> module.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandShell.CurrentLine">
+            <summary>
+            Current line interactive object.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandShell.History">
+            <summary>
+            Command history.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandShell.AutoComplete">
+            <summary>
+            Auto complete list.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandShell.#ctor(System.String,System.String)">
+            <summary>
+            Initializes the instance with optional default header and prompt format.
+            </summary>
+            <param name="header">Header to display when the shell starts.</param>
+            <param name="prompt">Command prompt format string, use {0} for current directory.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.Start">
+            <summary>
+            Starts the shell session. Blocks the current thread until exited.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandShell.ShowMsg(System.String,Woof.Command.CommandMessageType)">
+            <summary>
+            Shows a text message.
+            </summary>
+            <param name="message">Text message.</param>
+            <param name="type">Message type from <see cref="T:Woof.Command.CommandMessageType"/> enumeration.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.ShowLines(System.Collections.Generic.IEnumerable{System.String},System.ConsoleColor)">
+            <summary>
+            Shows a line collection.
+            </summary>
+            <param name="lines">Any text lines collection.</param>
+            <param name="color">Optional text color.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HandleResets(System.ConsoleKeyInfo)">
+            <summary>
+            Handles resetting special shell modes like history and auto-complete.
+            </summary>
+            <param name="k">Keyboard chord.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HandleAutoComplete(System.ConsoleKeyInfo)">
+            <summary>
+            Handles auto-complete shortcut.
+            </summary>
+            <param name="k"></param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HandleHistory(System.ConsoleKeyInfo)">
+            <summary>
+            Handles history shortcuts.
+            </summary>
+            <param name="k">Keyboard chord.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HandleExec(System.ConsoleKeyInfo,System.Boolean@)">
+            <summary>
+            Handles the enter key.
+            </summary>
+            <param name="k">Keyboard chord.</param>
+            <param name="shouldExit">True when exit is requested either by internal or external command.</param>
+            <returns>True if shortcut matched.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HandleExit(System.ConsoleKeyInfo)">
+            <summary>
+            Returns true if shell exit shortcut is detected.
+            </summary>
+            <param name="k">Keyboard chord.</param>
+            <returns>True if exit shortcut is detected.</returns>
+        </member>
+        <member name="M:Woof.Command.CommandShell.OnCommand(Woof.Command.CommandEventArgs)">
+            <summary>
+            Internal command handler.
+            If the command is not handled in <see cref="E:Woof.Command.CommandShell.Command"/> event, it's handled here.
+            </summary>
+            <param name="e">Command arguments.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.Prompt">
+            <summary>
+            Shows command prompt as defined.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandShell.Execute(System.String,System.Boolean,System.String[])">
+            <summary>
+            Executes external command with STDOUT and STDERR redirected to this shell.
+            Blocks current thread until external process exits.
+            </summary>
+            <param name="command">Command name or file name.</param>
+            <param name="redirection">True to redirect standard output and standard error, if set true, the output from the process will be intercepted and own, colored output will occur.</param>
+            <param name="arguments">Arguments to pass.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.GetContent(System.String)">
+            <summary>
+            Displays the content of the text file.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.GetLocation(System.String)">
+            <summary>
+            Displays a list of directories and files in the specified directory.
+            </summary>
+            <param name="dir">Existing directory. A warning is displayed when the directory doesn't exist.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HistoryStore">
+            <summary>
+            Stores the current history to the settings file if one is configured.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HistoryRestore">
+            <summary>
+            Restores the current history from the settings file if one is configured.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HistoryClear">
+            <summary>
+            Clears the current history and updates the settings file if one is configured.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandShell.HistoryShow">
+            <summary>
+            Shows the history lines (if any available).
+            </summary>
+        </member>
+        <member name="M:Woof.Command.CommandShell.Man(System.String)">
+            <summary>
+            Shows the micro-manual for the internal shell command.
+            </summary>
+            <param name="page"></param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.SetLocation(System.String)">
+            <summary>
+            Sets the current location to the directory specified, or displays the current directory on null parameter.
+            </summary>
+            <param name="dir">Existing directory. A warning is displayed when the directory doesn't exist.</param>
+        </member>
+        <member name="M:Woof.Command.CommandShell.Touch(System.String)">
+            <summary>
+            Either creates an empty file or modifies last write time of an existing file.
+            </summary>
+            <param name="fileName">A path to the file.</param>
+        </member>
+        <member name="T:Woof.Command.CommandMessageType">
+            <summary>
+            Console message type enumeration.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandMessageType.Content">
+            <summary>
+            Generic text content.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandMessageType.Info">
+            <summary>
+            Distinguished informational message.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandMessageType.Special">
+            <summary>
+            Special distinctive message.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandMessageType.Notice">
+            <summary>
+            A notice. Nothing wrong here.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandMessageType.Warning">
+            <summary>
+            A warning. Probably the user has done something wrong.
+            </summary>
+        </member>
+        <member name="F:Woof.Command.CommandMessageType.Error">
+            <summary>
+            An error. Either the user has entered invalid data, or the command encountered an exception.
+            </summary>
+        </member>
+        <member name="T:Woof.Command.ConsoleKeyShortcut">
+            <summary>
+            Structure containing user defined console key shortcut.
+            Test using <see cref="M:Woof.Command.ConsoleKeyShortcut.IsMatch(System.ConsoleKeyInfo)"/> method.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.ConsoleKeyShortcut.Key">
+            <summary>
+            Gets the key part of the shortcut.
+            </summary>
+        </member>
+        <member name="P:Woof.Command.ConsoleKeyShortcut.Modifiers">
+            <summary>
+            Gets the modifiers part of the shortcut.
+            </summary>
+        </member>
+        <member name="M:Woof.Command.ConsoleKeyShortcut.#ctor(System.ConsoleModifiers,System.ConsoleKey)">
+            <summary>
+            Creates new instance of the shortcut.
+            </summary>
+            <param name="modifiers">The modifiers, 0 for no modifiers.</param>
+            <param name="key">The key.</param>
+        </member>
+        <member name="M:Woof.Command.ConsoleKeyShortcut.IsMatch(System.ConsoleKeyInfo)">
+            <summary>
+            Tests if the pressed keyboard chord matches the defined shortcut.
+            </summary>
+            <param name="k">Key and modifiers.</param>
+            <returns>True if key and modifiers were exactly as defined.</returns>
+        </member>
+    </members>
+</doc>

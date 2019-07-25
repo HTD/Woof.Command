@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Woof</RootNamespace>
+    <Version>2.0.0</Version>
+    <Authors>Adam Łyskawa</Authors>
+    <Company>CodeDog Ltd</Company>
+    <Description>Command Line Interface Shell for any purpose. With autocomplete and some build in features.</Description>
+    <PackageProjectUrl>https://github.com/HTD/Woof.Command</PackageProjectUrl>
+    <PackageTags>code core codedog dotnet system cli console shell</PackageTags>
+    <PackageReleaseNotes>First release.</PackageReleaseNotes>
+    <Copyright>(c)2018 by CodeDog Ltd.</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Source\Woof\2.x\Woof.Command\Woof.Command.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Source\Woof\2.x\Woof.Command\Woof.Command.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Woof.Command.Test\**" />
+    <EmbeddedResource Remove="Woof.Command.Test\**" />
+    <None Remove="Woof.Command.Test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Woof.Core" Version="2.0.0" />
+  </ItemGroup>
+</Project>
